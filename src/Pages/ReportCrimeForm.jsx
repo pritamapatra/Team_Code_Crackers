@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Camera, MapPin, File, AlertTriangle, X } from "lucide-react";
+import { Camera, MapPin, File, X } from "lucide-react";
 
 const ReportCrimeForm = () => {
   const [files, setFiles] = useState([]);
@@ -7,12 +7,6 @@ const ReportCrimeForm = () => {
   const [crimeType, setCrimeType] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
-
-  // Cosmos DB Configuration (Replace with your details)
-  const COSMOS_DB_ENDPOINT = "https://your-cosmosdb.documents.azure.com:443/"; // Replace with your Cosmos DB endpoint
-  const PRIMARY_KEY = "your-primary-key"; // Replace with your primary key
-  const DATABASE_ID = "CrimeReportsDB"; // Replace with your database name
-  const CONTAINER_ID = "Reports"; // Replace with your container name
 
   // Function to handle file upload
   const handleFileUpload = (e) => {
@@ -25,38 +19,25 @@ const ReportCrimeForm = () => {
     setFiles(files.filter((_, i) => i !== index));
   };
 
-  // Function to submit crime report to Cosmos DB
+  // Function to submit crime report to FastAPI backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Generate a unique ID for the report
-    const reportId = `report-${Date.now()}`;
-
-    // Prepare the data payload
-    const crimeReport = {
-      id: reportId, // Required for Cosmos DB
+    const reportData = {
       crimeType,
       description,
       location,
       timestamp: new Date().toISOString(),
-      files: files.map((file) => file.name), // Storing file names only (uploading actual files requires Blob Storage)
+      files: files.map(file => file.name),
     };
 
     try {
-      const response = await fetch(
-        `${COSMOS_DB_ENDPOINT}dbs/${DATABASE_ID}/colls/${CONTAINER_ID}/docs`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-ms-version": "2018-12-31",
-            "x-ms-date": new Date().toUTCString(),
-            "Authorization": `type=master&ver=1.0&sig=${PRIMARY_KEY}`,
-          },
-          body: JSON.stringify(crimeReport),
-        }
-      );
+      const response = await fetch("http://localhost:8000/submit-report/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reportData),
+      });
 
       if (response.ok) {
         alert("Report submitted successfully!");
@@ -65,12 +46,11 @@ const ReportCrimeForm = () => {
         setLocation("");
         setFiles([]);
       } else {
-        const errorData = await response.json();
-        alert(`Failed to submit report: ${errorData.message}`);
+        alert("Failed to submit report.");
       }
     } catch (error) {
-      console.error("Error submitting report:", error);
-      alert("An error occurred while submitting the report.");
+      console.error("Error:", error);
+      alert("An error occurred.");
     }
 
     setIsSubmitting(false);
