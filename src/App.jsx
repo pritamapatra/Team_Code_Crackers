@@ -5,6 +5,7 @@ import ReportCrimeForm from './Pages/ReportCrimeForm'
 import Dashboard from './Pages/Dashboard'
 import ReportDetails from './Pages/ReportDetails'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Homepage from './Pages/Homepage'
 //import WelcomeScreen from './Pages/WelcomeScreen'
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/report/:id" element={<ReportDetails/>}/>
       </Routes>
     </Router>
+    <Homepage/>
 
        
     </>
