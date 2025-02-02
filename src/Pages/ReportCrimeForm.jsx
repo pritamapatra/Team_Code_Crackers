@@ -1,25 +1,12 @@
-<<<<<<< HEAD
-import React, { useState } from 'react';
-import { Camera, MapPin, File, ChevronLeft, AlertTriangle, X, Upload, Info } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-=======
 import React, { useState } from "react";
-import { Camera, MapPin, File, AlertTriangle, X } from "lucide-react";
+import { Camera, MapPin, File, X } from "lucide-react";
 
->>>>>>> cd774b84d1b968f9066cc9fe40dbda3f4d1e7c38
 const ReportCrimeForm = () => {
   const [files, setFiles] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [crimeType, setCrimeType] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
-  const navigate = useNavigate();
-
-  // Cosmos DB Configuration (Replace with your details)
-  const COSMOS_DB_ENDPOINT = "https://your-cosmosdb.documents.azure.com:443/"; // Replace with your Cosmos DB endpoint
-  const PRIMARY_KEY = "your-primary-key"; // Replace with your primary key
-  const DATABASE_ID = "CrimeReportsDB"; // Replace with your database name
-  const CONTAINER_ID = "Reports"; // Replace with your container name
 
   // Function to handle file upload
   const handleFileUpload = (e) => {
@@ -32,48 +19,25 @@ const ReportCrimeForm = () => {
     setFiles(files.filter((_, i) => i !== index));
   };
 
-  // Function to submit crime report to Cosmos DB
+  // Function to submit crime report to FastAPI backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Generate a unique ID for the report
-    const reportId = `report-${Date.now()}`;
-
-    // Prepare the data payload
-    const crimeReport = {
-      id: reportId, // Required for Cosmos DB
+    const reportData = {
       crimeType,
       description,
       location,
       timestamp: new Date().toISOString(),
-      files: files.map((file) => file.name), // Storing file names only (uploading actual files requires Blob Storage)
+      files: files.map(file => file.name),
     };
 
     try {
-<<<<<<< HEAD
-        console.log("Crime Type: ", crimeType);
-console.log("Description: ", description);
-console.log("Location: ", location);
-      const response = await fetch("https://prod-17.northcentralus.logic.azure.com:443/workflows/b5469829ca6b46c786ec4411010c137b/triggers/When_a_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=p7LEanmOfRxvT44dXqvWzPRSQPcZTN0dZAcbwpUCX1E", {
+      const response = await fetch("http://localhost:8000/submit-report/", {
         method: "POST",
-        body: formData
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reportData),
       });
-=======
-      const response = await fetch(
-        `${COSMOS_DB_ENDPOINT}dbs/${DATABASE_ID}/colls/${CONTAINER_ID}/docs`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-ms-version": "2018-12-31",
-            "x-ms-date": new Date().toUTCString(),
-            "Authorization": `type=master&ver=1.0&sig=${PRIMARY_KEY}`,
-          },
-          body: JSON.stringify(crimeReport),
-        }
-      );
->>>>>>> cd774b84d1b968f9066cc9fe40dbda3f4d1e7c38
 
       if (response.ok) {
         alert("Report submitted successfully!");
@@ -82,12 +46,11 @@ console.log("Location: ", location);
         setLocation("");
         setFiles([]);
       } else {
-        const errorData = await response.json();
-        alert(`Failed to submit report: ${errorData.message}`);
+        alert("Failed to submit report.");
       }
     } catch (error) {
-      console.error("Error submitting report:", error);
-      alert("An error occurred while submitting the report.");
+      console.error("Error:", error);
+      alert("An error occurred.");
     }
 
     setIsSubmitting(false);
@@ -96,25 +59,7 @@ console.log("Location: ", location);
   return (
     <div className="min-h-screen bg-gray-900 text-white p-4">
       <div className="max-w-2xl mx-auto mb-6">
-<<<<<<< HEAD
-        <div className="flex items-center gap-4 mb-6">
-          <button className="hover:bg-gray-800 p-2 rounded-full transition-colors"
-          onClick={() => navigate('/')}>
-            <ChevronLeft size={24} />
-          </button>
-          <h1 className="text-2xl font-bold">Report a Crime</h1>
-        </div>
-
-        {/* Anonymous Notice */}
-        <div className="bg-blue-900/30 border border-blue-500/20 rounded-lg p-4 mb-6 flex items-start gap-3">
-          <Info className="text-blue-400 shrink-0 mt-1" size={20} />
-          <p className="text-sm text-blue-100">
-            Your report is completely anonymous. No personal information will be collected.
-          </p>
-        </div>
-=======
         <h1 className="text-2xl font-bold">Report a Crime</h1>
->>>>>>> cd774b84d1b968f9066cc9fe40dbda3f4d1e7c38
       </div>
 
       <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-6">
