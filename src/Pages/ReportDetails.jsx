@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { ChevronLeft, MessageSquare, MapPin, Camera, Clock, Send, CheckCircle, ChevronRight, AlertTriangle } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
 const ReportDetails = () => {
   const [showChat, setShowChat] = useState(false);
-
+  const Nevigate = useNavigate();
   const report = {
     id: "CR-2024-001",
     type: "Theft",
@@ -68,7 +68,8 @@ const ReportDetails = () => {
       {/* Header */}
       <div className="sticky top-0 bg-gray-900/95 backdrop-blur-sm z-10 p-4 border-b border-gray-800">
         <div className="max-w-2xl mx-auto flex items-center gap-4">
-          <button className="hover:bg-gray-800 p-2 rounded-full transition-colors">
+          <button className="hover:bg-gray-800 p-2 rounded-full transition-colors"
+          onClick={() => Nevigate('/')}>
             <ChevronLeft size={24} />
           </button>
           <div>

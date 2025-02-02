@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Plus, Search, Bell, ChevronRight, Clock, CheckCircle, AlertCircle, User, Filter } from 'lucide-react';
-
+import { Plus, Search, Bell, ChevronRight, ChevronLeft, Clock, CheckCircle, AlertCircle, User, Filter } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 const Dashboard = () => {
   const [filterActive, setFilterActive] = useState(false);
-
+const navigate = useNavigate();
   const reports = [
     {
       id: "CR-2024-001",
@@ -66,6 +66,10 @@ const Dashboard = () => {
       <div className="sticky top-0 bg-gray-900/95 backdrop-blur-sm z-10">
         <div className="max-w-2xl mx-auto p-4">
           <div className="flex justify-between items-center mb-4">
+          <button className="hover:bg-gray-800 p-2 rounded-full transition-colors"
+          onClick={() => navigate('/')}>
+            <ChevronLeft size={24} />
+          </button>
             <h1 className="text-2xl font-bold">Dashboard</h1>
             <div className="flex gap-3">
               <button className="p-2 hover:bg-gray-800 rounded-full transition-colors relative">
