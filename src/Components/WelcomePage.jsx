@@ -68,14 +68,7 @@ const WelcomePage = () => {
       </div>
 
       {/* App Store Badges */}
-      <div className="mt-12 flex flex-wrap justify-center gap-4">
-        <button className="bg-gray-800 px-6 py-3 rounded-xl flex items-center space-x-2 hover:bg-gray-700 transition-colors">
-          <span>App Store</span>
-        </button>
-        <button className="bg-gray-800 px-6 py-3 rounded-xl flex items-center space-x-2 hover:bg-gray-700 transition-colors">
-          <span>Play Store</span>
-        </button>
-      </div>
+       
     </div>
   );
 };

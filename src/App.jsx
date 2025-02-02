@@ -6,7 +6,7 @@ import Dashboard from './Pages/Dashboard'
 import ReportDetails from './Pages/ReportDetails'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Homepage from './Pages/Homepage'
-//import WelcomeScreen from './Pages/WelcomeScreen'
+ 
 
 function App() {
   const [count, setCount] = useState(0)
@@ -15,13 +15,14 @@ function App() {
     <>
     <Router>
       <Routes>
-        <Route path="/" element={<WelcomePage/>}/>
+        <Route path="/" element={<Homepage/>}/>
+         
         <Route path="/report" element={<ReportCrimeForm/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/report/:id" element={<ReportDetails/>}/>
       </Routes>
     </Router>
-    <Homepage/>
+     
 
        
     </>

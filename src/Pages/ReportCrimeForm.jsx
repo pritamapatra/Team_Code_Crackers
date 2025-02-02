@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Camera, MapPin, File, ChevronLeft, AlertTriangle, X, Upload, Info } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
 const ReportCrimeForm = () => {
   const [files, setFiles] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [crimeType, setCrimeType] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
+  const navigate = useNavigate();
 
   const crimeTypes = [
     "Theft",
@@ -40,7 +41,10 @@ const ReportCrimeForm = () => {
     });
 
     try {
-      const response = await fetch("YOUR_LOGIC_APP_URL", {
+        console.log("Crime Type: ", crimeType);
+console.log("Description: ", description);
+console.log("Location: ", location);
+      const response = await fetch("https://prod-17.northcentralus.logic.azure.com:443/workflows/b5469829ca6b46c786ec4411010c137b/triggers/When_a_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=p7LEanmOfRxvT44dXqvWzPRSQPcZTN0dZAcbwpUCX1E", {
         method: "POST",
         body: formData
       });
@@ -66,7 +70,8 @@ const ReportCrimeForm = () => {
       {/* Header */}
       <div className="max-w-2xl mx-auto mb-6">
         <div className="flex items-center gap-4 mb-6">
-          <button className="hover:bg-gray-800 p-2 rounded-full transition-colors">
+          <button className="hover:bg-gray-800 p-2 rounded-full transition-colors"
+          onClick={() => navigate('/')}>
             <ChevronLeft size={24} />
           </button>
           <h1 className="text-2xl font-bold">Report a Crime</h1>
