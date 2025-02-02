@@ -4,6 +4,9 @@ import { Camera, MapPin, File, ChevronLeft, AlertTriangle, X, Upload, Info } fro
 const ReportCrimeForm = () => {
   const [files, setFiles] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [crimeType, setCrimeType] = useState("");
+  const [description, setDescription] = useState("");
+  const [location, setLocation] = useState("");
 
   const crimeTypes = [
     "Theft",
@@ -27,8 +30,34 @@ const ReportCrimeForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    const formData = new FormData();
+    formData.append("crimeType", crimeType);
+    formData.append("description", description);
+    formData.append("location", location);
+    files.forEach((file, index) => {
+      formData.append(`file${index}`, file);
+    });
+
+    try {
+      const response = await fetch("YOUR_LOGIC_APP_URL", {
+        method: "POST",
+        body: formData
+      });
+
+      if (response.ok) {
+        alert("Report submitted successfully!");
+        setCrimeType("");
+        setDescription("");
+        setLocation("");
+        setFiles([]);
+      } else {
+        alert("Failed to submit report.");
+      }
+    } catch (error) {
+      alert("An error occurred while submitting the report.");
+    }
+
     setIsSubmitting(false);
   };
 
@@ -60,6 +89,8 @@ const ReportCrimeForm = () => {
             Crime Type
           </label>
           <select 
+            value={crimeType}
+            onChange={(e) => setCrimeType(e.target.value)}
             className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             required
           >
@@ -76,6 +107,8 @@ const ReportCrimeForm = () => {
             Description
           </label>
           <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 h-32 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             placeholder="Provide as much detail as possible..."
             required
@@ -145,6 +178,8 @@ const ReportCrimeForm = () => {
           </label>
           <div className="relative">
             <input
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
               type="text"
               className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 pl-10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               placeholder="Enter location or use current location"
